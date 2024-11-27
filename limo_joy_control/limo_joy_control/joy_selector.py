@@ -38,6 +38,9 @@ class JoySelector(Node):
 
     def listener_auto_callback(self, msg):
         self.msg_cmd_auto = msg        
+        # un petit check de securite, a changer a vos risques et perils
+        self.msg_cmd_auto.linear.x = max (-0.5, min (self.msg_cmd_auto.linear.x,0.5))
+        self.msg_cmd_auto.angular.z = max (-0.5, min (self.msg_cmd_auto.angular.z,0.5))
 
     def listener_callback(self, msg):        
         self.counter_no_joystick = 0
