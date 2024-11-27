@@ -28,12 +28,6 @@ def generate_launch_description():
                 package='limo_joy_control',
                 executable='joy_selector',
                 name='joy_selector',
-                remappings=[('cmd_vel','joy_cmd_vel')]
                 ),                            
-            
-            Node(
-                package='limo_joy_control',
-                executable='limo_safe_control',
-                name='safe_control',
-                ),                 
+                          
             ])

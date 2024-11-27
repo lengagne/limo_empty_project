@@ -10,6 +10,7 @@ class JoySelector(Node):
 
     def __init__(self):        
         self.mode = 0
+        self.counter_no_joystick = 0
         
         self.msg_cmd_manual = Twist()
         self.msg_cmd_auto = Twist()
@@ -27,6 +28,10 @@ class JoySelector(Node):
         
         self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
         
+        # creation du timer pour vérifier le retour d'information du joystick
+        self.timer = self.create_timer(0.1, self.timer_callback)
+        
+        
         
     def listener_manual_callback(self, msg):
         self.msg_cmd_manual = msg
@@ -34,8 +39,8 @@ class JoySelector(Node):
     def listener_auto_callback(self, msg):
         self.msg_cmd_auto = msg        
 
-    def listener_callback(self, msg):
-        
+    def listener_callback(self, msg):        
+        self.counter_no_joystick = 0
         if msg.buttons[5]:
             self.mode = 0
         if msg.buttons[7]:
@@ -45,6 +50,12 @@ class JoySelector(Node):
             self.publisher_.publish(self.msg_cmd_manual)
         elif self.mode ==1:
             self.publisher_.publish(self.msg_cmd_auto)
+            
+    def timer_callback(self):
+        self.counter_no_joystick += 1
+        if self.counter_no_joystick > 10:
+            self.counter_no_joystick = 0
+            self.get_logger().error('Error, le Joystick n est pas detecte !')
         
 
 def main(args=None):
