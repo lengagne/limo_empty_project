@@ -20,7 +20,7 @@ def generate_launch_description():
             
                          
             Node(
-                package='limo_joy_control',
+                package='student_work',
                 executable='auto_control',
                 name='auto_control',
                 ),                   
