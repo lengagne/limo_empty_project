@@ -1,33 +1,39 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, FindPackageShare
+from launch.substitutions import LaunchConfiguration
 import os
 
 def generate_launch_description():
-    # Localisation du dossier de partage de votre paquet
-    package_share_directory = FindPackageShare('<votre_package>').find('<votre_package>')
+    # Argument pour activer le temps simulé
+    use_sim_time_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation time if true'
+    )
 
-    # Chemin absolu vers le fichier de configuration RViz dans le dossier config du paquet
-    rviz_config_file = os.path.join(package_share_directory, 'config', 'rviz2.rviz')
-
-    # Déclaration de l'argument pour le fichier de configuration RViz
+    # Argument pour le fichier de configuration RViz
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config',
-        default_value=rviz_config_file,  # Utilisation du chemin absolu ici
+        default_value=os.path.join(
+            os.path.dirname(__file__),
+            '../config/rviz2.rviz'
+        ),
         description='Path to the RViz config file'
     )
 
-    # Node pour lancer RViz2 avec le fichier de configuration spécifié
+    # Node pour RViz2
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
         name='rviz2',
         arguments=['-d', LaunchConfiguration('rviz_config')],
-        output='screen'
+        output='screen',
+        parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}]
     )
 
     return LaunchDescription([
+        use_sim_time_arg,
         rviz_config_arg,
         rviz_node
     ])
