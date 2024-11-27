@@ -1,21 +1,24 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, FindPackageShare
 import os
 
 def generate_launch_description():
-    # Déclaration des arguments pour le fichier RViz
+    # Localisation du dossier de partage de votre paquet
+    package_share_directory = FindPackageShare('<votre_package>').find('<votre_package>')
+
+    # Chemin absolu vers le fichier de configuration RViz dans le dossier config du paquet
+    rviz_config_file = os.path.join(package_share_directory, 'config', 'rviz2.rviz')
+
+    # Déclaration de l'argument pour le fichier de configuration RViz
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config',
-        default_value=os.path.join(
-            os.path.dirname(__file__),  # Chemin du fichier de lancement
-            '../config/my_rviz_config.rviz'  # Chemin relatif du fichier RViz
-        ),
+        default_value=rviz_config_file,  # Utilisation du chemin absolu ici
         description='Path to the RViz config file'
     )
 
-    # Node pour lancer RViz2 avec le fichier de configuration
+    # Node pour lancer RViz2 avec le fichier de configuration spécifié
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
@@ -24,7 +27,6 @@ def generate_launch_description():
         output='screen'
     )
 
-    # Retourne une description de lancement avec l'argument et le nœud RViz
     return LaunchDescription([
         rviz_config_arg,
         rviz_node
