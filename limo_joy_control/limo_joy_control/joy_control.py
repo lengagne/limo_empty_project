@@ -18,8 +18,8 @@ class LimoJoyControl(Node):
         
 
     def listener_callback(self, msg):
-        self.msg_cmd.linear.x = msg.axes[1] * 0.2
-        self.msg_cmd.angular.z = -(msg.buttons[1] - msg.buttons[3])*2.0
+        self.msg_cmd.linear.x = msg.axes[1] * 0.5
+        self.msg_cmd.angular.z = -(msg.buttons[1] - msg.buttons[3])*0.5
         self.publisher_.publish(self.msg_cmd)
 
 

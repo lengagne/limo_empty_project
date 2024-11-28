@@ -16,7 +16,7 @@ def generate_launch_description():
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config',
         default_value=os.path.join(
-            os.path.dirname(__file__),
+            os.path.dirname(__file__),          # changer cette ligne
             '../config/rviz2.rviz'
         ),
         description='Path to the RViz config file'
