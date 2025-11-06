@@ -11,7 +11,7 @@ class AutoControl(Node):
 
     def __init__(self):
         
-        laser_msg = LaserScan()
+        self.laser_msg = LaserScan()
         
         super().__init__('auto_control')
         self.msg_cmd = Twist()
