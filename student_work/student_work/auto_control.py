@@ -1,6 +1,7 @@
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
@@ -19,10 +20,11 @@ class AutoControl(Node):
         timer_period = 0.5  # seconds
         self.timer = self.create_timer(timer_period, self.publisher_callback)
         
-        self.subscription = self.create_subscription(LaserScan,'/scan',self.listener_scan_callback,10)
+        self.subscription = self.create_subscription(LaserScan,'/scan',self.listener_scan_callback,qos_profile_sensor_data)
         self.subscription  # prevent unused variable warning
 
     def listener_scan_callback(self, msg):
+        self.get_logger().warn("Scan reçu")
         self.laser_msg = msg
 
 
